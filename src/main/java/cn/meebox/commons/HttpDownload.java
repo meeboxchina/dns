@@ -29,7 +29,7 @@ public class HttpDownload {
 		this.dest = dest;
 	}
 	
-	public void down() throws ClientProtocolException, IOException{
+	public String down() throws ClientProtocolException, IOException{
 		//String url = "http://ww2.sinaimg.cn/large/9d57a855jw1dqpv9fp4yuj.jpg";
         String[] path = uri.split("/");
         String filename = path[path.length-1];
@@ -56,5 +56,6 @@ public class HttpDownload {
         	 in.close();
         }
         httpclient.close();
+        return dest+filename;
 	}
 }

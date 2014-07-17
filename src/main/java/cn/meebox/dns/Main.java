@@ -14,6 +14,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		ICANN icann = new ICANN();
 		icann.get("APNIC","/Users/sunsunny/");
+		icann.zhengli();
 	}
 
 }

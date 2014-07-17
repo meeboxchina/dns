@@ -13,7 +13,7 @@ public class Main {
 	public static void main(String[] args) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
 		ICANN icann = new ICANN();
-		icann.get("APNIC");
+		icann.get("APNIC","/Users/sunsunny/");
 	}
 
 }

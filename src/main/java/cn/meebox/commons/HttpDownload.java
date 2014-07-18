@@ -15,8 +15,6 @@ import org.apache.http.impl.client.HttpClients;
 public class HttpDownload {
 
 	private String uri;
-	
-
 	private String dest;
 	
 	public HttpDownload() {
@@ -51,8 +49,6 @@ public class HttpDownload {
                 fout.flush();
                 fout.close();
          } finally {
-        	 //System.out.println( "Download end" );
-        	 //System.out.println(file.length());
         	 in.close();
         }
         httpclient.close();

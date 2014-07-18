@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping package="cn.meebox.dns">
+    <class name="IPv4" table="IPv4">
+		<id name="id" column="Id"  type="java.lang.Integer">
+			<generator class="native"/>
+		</id>
+		<property name="registry" column="registry"  type="java.lang.String"/>
+		<property name="cc" column="cc"  type="java.lang.String"/>
+		<property name="recordtype" column="recordtype"  type="java.lang.String"/>
+		<property name="start" column="start"  type="java.lang.String"/>
+		<property name="count" column="count"  type="java.lang.String"/>
+		<property name="receiveddate" column="receiveddate"  type="java.lang.String"/>
+		<property name="status" column="status"  type="java.lang.String"/>
+    </class>
+</hibernate-mapping>

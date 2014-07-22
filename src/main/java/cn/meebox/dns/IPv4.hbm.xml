@@ -4,15 +4,17 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping package="cn.meebox.dns">
-    <class name="IPv4" table="IPv4">
-		<id name="id" column="Id"  type="java.lang.Integer">
-			<generator class="native"/>
+    <class name="IPv4" table="ipv4">
+		<id name="id" column="id">
+			<generator   class="sequence">   
+            	<param name="sequence">ipv4_id_seq</param>   
+       		</generator>
 		</id>
 		<property name="registry" column="registry"  type="java.lang.String"/>
 		<property name="cc" column="cc"  type="java.lang.String"/>
 		<property name="recordtype" column="recordtype"  type="java.lang.String"/>
-		<property name="start" column="start"  type="java.lang.String"/>
-		<property name="count" column="count"  type="java.lang.String"/>
+		<property name="start" column="start" type="java.net.InetAddress" />
+		<property name="count" column="count"  type="java.lang.Integer"/>
 		<property name="receiveddate" column="receiveddate"  type="java.lang.String"/>
 		<property name="status" column="status"  type="java.lang.String"/>
     </class>

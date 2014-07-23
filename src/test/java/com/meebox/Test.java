@@ -51,7 +51,7 @@ public class Test {
 		IPv4 ipv4 = new IPv4();
 		ipv4.setRegistry("apnic");
 		ipv4.setCc("CN");
-		ipv4.setStart("10.20.30.0/24");
+		ipv4.setStart("10.20.30");
 		Transaction tx = null;
         
 		Configuration cfg = new Configuration().configure();

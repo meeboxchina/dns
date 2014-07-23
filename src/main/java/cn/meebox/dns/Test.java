@@ -1,8 +1,10 @@
 package cn.meebox.dns;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -16,27 +18,11 @@ public class Test {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String[] args) throws UnknownHostException {
+	public static void main(String[] args) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
-		IPv4 ipv4 = new IPv4();
-		ipv4.setRegistry("apnic");
-		ipv4.setCc("CN");
-		ipv4.setStart(Inet4Address.getLocalHost());
-		Transaction tx = null;
-		
-		
-		Configuration cfg = new Configuration().configure();
-
-        StandardServiceRegistryBuilder srb = new StandardServiceRegistryBuilder().applySettings(cfg.getProperties()); 
-        StandardServiceRegistry sr = srb.build();             
-        SessionFactory factory = cfg.buildSessionFactory(sr);
-
-        Session session = factory.openSession();             
-        tx = session.beginTransaction();
-
-        session.save(ipv4);
-        tx.commit();
-        session.close();
+		ICANN icann = new ICANN();
+		icann.getAPNIC("/Users/sunsunny/");
+		icann.import2db();
 
 	}
 

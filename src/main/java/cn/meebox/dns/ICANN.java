@@ -6,6 +6,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,9 +37,15 @@ public class ICANN {
 		this.filepath = apnic.down();
 	}
 	
-	public void zhengli() throws IOException{
+	public void getAPNIC(String dest) throws ClientProtocolException, IOException{
+		
+		HttpDownload apnic = new HttpDownload(APNIC,dest);
+		this.filepath = apnic.down();
+	}
+	
+	public void import2db() throws IOException{
 		//String regex = "^[a-z]{3,5}\\|[A-Z]{2}\\|(ipv4)\\|.*";
-		String regex = "^[a-z]{3,5}\\|CN\\|(ipv4)\\|.*";
+		String regex = "^[a-z]{3,5}\\|[A-Z]{2}\\|(ipv4)\\|.*";
 		Pattern  pattern = Pattern.compile(regex);
 		
 		File file = new File(this.filepath);
@@ -44,14 +54,36 @@ public class ICANN {
 		
 		String line = null;
 		Matcher matcher = null;
-		while((line = br.readLine()) != null){
-			matcher = pattern.matcher(line);
-			if(matcher.find()){
-				//System.out.print(line);
-				String[] net = line.split("[|]");
-				System.out.println(net[3]);
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
+			Statement stmt = conn.createStatement();
+			
+			String sql = null;
+			
+			while((line = br.readLine()) != null){
+				matcher = pattern.matcher(line);
+				if(matcher.find()){
+					//System.out.print(line);
+					String[] net = line.split("[|]");
+					sql = "insert into ipv4 values (nextval('ipv4_id_seq'),'" + net[0] + "','" + net[1] + "','" + net[2] + "','" + net[3] + "','" + net[4] + "','" + net[5] + "','" + net[6] + "')";
+					stmt.executeUpdate(sql); 
+				}
 			}
-		}
+			
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		
+		
 	
 	}
 	

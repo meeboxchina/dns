@@ -5,11 +5,10 @@ public class IPv4 {
 	private String registry;
 	private String cc;
 	private String recordtype;
-	private java.net.InetAddress start;
+	private String start;
 	private int count;
-	private String receiveddate;
+	private java.sql.Date receiveddate;
 	private String status;
-	
 	public int getId() {
 		return id;
 	}
@@ -34,10 +33,10 @@ public class IPv4 {
 	public void setRecordtype(String recordtype) {
 		this.recordtype = recordtype;
 	}
-	public java.net.InetAddress getStart() {
+	public String getStart() {
 		return start;
 	}
-	public void setStart(java.net.InetAddress start) {
+	public void setStart(String start) {
 		this.start = start;
 	}
 	public int getCount() {
@@ -46,10 +45,10 @@ public class IPv4 {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	public String getReceiveddate() {
+	public java.sql.Date getReceiveddate() {
 		return receiveddate;
 	}
-	public void setReceiveddate(String receiveddate) {
+	public void setReceiveddate(java.sql.Date receiveddate) {
 		this.receiveddate = receiveddate;
 	}
 	public String getStatus() {
@@ -58,4 +57,5 @@ public class IPv4 {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
 }

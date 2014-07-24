@@ -21,8 +21,10 @@ public class Test {
 	public static void main(String[] args) throws ClientProtocolException, IOException {
 		// TODO Auto-generated method stub
 		ICANN icann = new ICANN();
-		icann.getAPNIC("/Users/sunsunny/");
-		icann.import2db();
+		icann.getStatsfile();
+		
+		//icann.getAPNIC("/Users/sunsunny/");
+		//icann.import2db();
 
 	}
 

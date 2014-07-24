@@ -8,8 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,8 @@ public class ICANN {
 	private String dest;
 	private String filepath;
 	private static String APNIC = "http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest";
+	
+	private Hashtable[] rir;
 	
 	public ICANN() {
 	}
@@ -41,6 +45,36 @@ public class ICANN {
 		
 		HttpDownload apnic = new HttpDownload(APNIC,dest);
 		this.filepath = apnic.down();
+	}
+	
+	public void getStatsfile(){
+		
+		try {
+			Class.forName("org.postgresql.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
+			Statement stmt = conn.createStatement();
+			String sql = "select icann.registry,icann.dl,icann.chkmd5,statsfile.etag from icann left join statsfile on icann.registry = statsfile.registry";
+			ResultSet rs = stmt.executeQuery(sql);
+			int i=0;
+			while(rs.next()){
+				rir[i].put("registry", rs.getString("registry"));
+				rir[i].put("dl", rs.getString("dl"));
+				rir[i].put("chkmd5", rs.getString("chkmd5"));
+				rir[i].put("etag", rs.getString("etag"));
+				i++;
+			}
+			
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		
 	}
 	
 	public void import2db() throws IOException{

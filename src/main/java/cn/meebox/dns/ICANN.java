@@ -81,10 +81,5 @@ public class ICANN {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
-		
-		
-	
 	}
-	
 }

@@ -1,5 +1,5 @@
-create table IPv4 (id serial, registry varchar(15), cc varchar(2), recordtype varchar(10), start cidr, count int, receiveddate date, status varchar(50), extensions varchar(50));
-
+create table ipv4 (id serial, registry varchar(15), cc varchar(2), recordtype varchar(10), start cidr, count int, receiveddate date, status varchar(50), extensions varchar(50));
+create table icann (id serial, registry varchar(15), chkmd5 varchar(100), chkasc varchar(100));
 Format:
 
 	registry|cc|type|start|value|date|status[|extensions...]

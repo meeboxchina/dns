@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderIterator;
@@ -52,8 +54,11 @@ public class Downloader {
         	
         	while(headerIterator.hasNext()){
             	header = headerIterator.nextHeader();
-            	
-            	
+            	if(header.getName().matches("ETag")){
+            		this.etag = header.getValue();
+            	}else if(header.getName().matches("Content-Length")){
+            		this.length = Integer.parseInt(header.getValue());
+            	}
             }
         	
 	        HttpEntity entity = response.getEntity();
@@ -72,6 +77,11 @@ public class Downloader {
 	        	 in.close();
 	        }
 	        httpclient.close();
+	        
+        }else if(response.getStatusLine().getStatusCode() == 304){
+        	this.code = 304;
+        }else{
+        	this.code = response.getStatusLine().getStatusCode();
         }
         return dest+filename;
 	}

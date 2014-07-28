@@ -72,7 +72,8 @@ public class ICANN {
 							+ "lastcode=" + code + ","
 							+ "length=" + length + ","
 							+ "downloadtime='" + now + "',"
-							+ "trytime='" + now + "'";
+							+ "trytime='" + now + "'"
+							+ "where registry='" + registry + "'";
 					
 					Statement stmtUpdate = conn.createStatement();
 					stmtUpdate.executeUpdate(sqlUpdate);
@@ -82,7 +83,8 @@ public class ICANN {
 					now = sdf.format(date);
 					
 					String sqlUpdate = "update statsfile set lastcode=" + code + ","
-							+ "trytime='" + now + "'";
+							+ "trytime='" + now + "'"
+							+ "where registry='" + registry + "'";
 					
 					Statement stmtUpdate = conn.createStatement();
 					stmtUpdate.executeUpdate(sqlUpdate);

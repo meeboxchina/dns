@@ -65,7 +65,7 @@ public class ICANN {
 				if(code ==200){
 					length = downloader.getLength();
 					Date date = new Date();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD HH:mm:ss");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 					now = sdf.format(date);
 					
 					String sqlUpdate = "update statsfile set etag='" + etag + "',"
@@ -78,7 +78,7 @@ public class ICANN {
 					stmtUpdate.executeUpdate(sqlUpdate);
 				}else{
 					Date date = new Date();
-					SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDD hh:mm:ss");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
 					now = sdf.format(date);
 					
 					String sqlUpdate = "update statsfile set lastcode=" + code + ","

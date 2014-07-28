@@ -7,7 +7,12 @@ insert into icann values (nextval('icann_id_seq'),'afrinic','ftp://ftp.afrinic.n
 insert into icann values (nextval('icann_id_seq'),'arin','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest.md5','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest.asc');
 insert into icann values (nextval('icann_id_seq'),'lacnic','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.md5','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.asc');
 
-create table statsfile (id serial, registry varchar(16), file bytea, downloadtime timestamp, etag varchar(50), lastmodified timestamp, md5 varchar(256));
+create table statsfile (id serial, registry varchar(16), file bytea, downloadtime timestamp, trytime timestamp, etag varchar(50), lastmodified timestamp, md5 varchar(256));
+insert into statsfile values (nextval('statsfile_id_seq'),'apnic');
+insert into statsfile values (nextval('statsfile_id_seq'),'ripe');
+insert into statsfile values (nextval('statsfile_id_seq'),'afrinic');
+insert into statsfile values (nextval('statsfile_id_seq'),'arin');
+insert into statsfile values (nextval('statsfile_id_seq'),'lacnic');
 
 Format:
 

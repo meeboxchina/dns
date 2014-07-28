@@ -24,8 +24,6 @@ public class ICANN {
 	private String RIR;
 	private String dest;
 	private String filepath;
-	private static String APNIC = "http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest";
-	
 	private Hashtable[] rir;
 	
 	public ICANN() {
@@ -33,18 +31,6 @@ public class ICANN {
 	
 	public ICANN(String RIP) {
 		this.RIR = RIP;
-	}
-	
-	public void get(String RIP, String dest) throws ClientProtocolException, IOException{
-		
-		HttpDownload apnic = new HttpDownload(APNIC,dest);
-		this.filepath = apnic.down();
-	}
-	
-	public void getAPNIC(String dest) throws ClientProtocolException, IOException{
-		
-		HttpDownload apnic = new HttpDownload(APNIC,dest);
-		this.filepath = apnic.down();
 	}
 	
 	public void getStatsfile(){
@@ -73,7 +59,6 @@ public class ICANN {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
 		
 	}
 	

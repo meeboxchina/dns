@@ -11,12 +11,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.client.ClientProtocolException;
 
+import cn.meebox.commons.Downloader;
 import cn.meebox.commons.HttpDownload;
 
 public class ICANN {
@@ -33,11 +36,15 @@ public class ICANN {
 		this.RIR = RIP;
 	}
 	
-	public void getStatsfile(){
+	public void getStatsfile() throws ClientProtocolException, IOException{
 		String registry;
 		String dl;
 		String chkmd5;
 		String etag;
+		int code;
+		int length;
+		String now;
+		
 		try {
 			Class.forName("org.postgresql.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
@@ -48,7 +55,38 @@ public class ICANN {
 				registry = rs.getString("registry");
 				dl = rs.getString("dl");
 				chkmd5 = rs.getString("chkmd5");
-				etag = rs.getString("chkmd5");
+				etag = rs.getString("etag");
+				
+				Downloader downloader = new Downloader(dl, "/Users/sunsunny/");
+				downloader.down(etag);
+				
+				etag = downloader.getEtag();
+				code = downloader.getCode();
+				if(code ==200){
+					length = downloader.getLength();
+					Date date = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMDD HH:mm:ss");
+					now = sdf.format(date);
+					
+					String sqlUpdate = "update statsfile set etag='" + etag + "',"
+							+ "lastcode=" + code + ","
+							+ "length=" + length + ","
+							+ "downloadtime='" + now + "',"
+							+ "trytime='" + now + "'";
+					
+					Statement stmtUpdate = conn.createStatement();
+					stmtUpdate.executeUpdate(sqlUpdate);
+				}else{
+					Date date = new Date();
+					SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDD hh:mm:ss");
+					now = sdf.format(date);
+					
+					String sqlUpdate = "update statsfile set lastcode=" + code + ","
+							+ "trytime='" + now + "'";
+					
+					Statement stmtUpdate = conn.createStatement();
+					stmtUpdate.executeUpdate(sqlUpdate);
+				}
 				
 			}
 			

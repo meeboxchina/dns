@@ -45,6 +45,7 @@ public class Downloader {
         httpget.addHeader("ETag", etag);
         
         HttpResponse response = httpclient.execute(httpget);
+        
         this.code = response.getStatusLine().getStatusCode();
 
         HeaderIterator headerIterator = response.headerIterator();
@@ -85,4 +86,18 @@ public class Downloader {
         }
         return dest+filename;
 	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+
+	public String getEtag() {
+		return etag;
+	}
+
 }

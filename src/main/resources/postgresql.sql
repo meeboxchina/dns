@@ -1,13 +1,13 @@
 create table ipv4 (id serial, registry varchar(15), cc varchar(2), recordtype varchar(10), start cidr, count int, receiveddate date, status varchar(50), extensions varchar(50));
 
 create table icann (id serial, registry varchar(16), dl varchar(256), chkmd5 varchar(256), chkasc varchar(256));
-insert into icann values (nextval('icann_id_seq'),'apnic','ftp://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest','ftp://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest.md5','ftp://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest.asc');
-insert into icann values (nextval('icann_id_seq'),'ripe','ftp://ftp.ripe.net/ripe/stats/delegated-ripencc-latest','ftp://ftp.ripe.net/ripe/stats/delegated-ripencc-latest.md5','ftp://ftp.ripe.net/ripe/stats/delegated-ripencc-latest.asc');
-insert into icann values (nextval('icann_id_seq'),'afrinic','ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest',' ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest.md5','ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest.asc');
-insert into icann values (nextval('icann_id_seq'),'arin','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest.md5','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest.asc');
-insert into icann values (nextval('icann_id_seq'),'lacnic','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.md5','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.asc');
+insert into icann values (nextval('icann_id_seq'),'apnic','http://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest','http://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest.md5','ftp://ftp.apnic.net/pub/stats/apnic/delegated-apnic-latest.asc');
+insert into icann values (nextval('icann_id_seq'),'ripe','http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest','http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest.md5','ftp://ftp.ripe.net/ripe/stats/delegated-ripencc-latest.asc');
+insert into icann values (nextval('icann_id_seq'),'afrinic','http://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest',' http://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest.md5','ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest.asc');
+insert into icann values (nextval('icann_id_seq'),'arin','http://ftp.arin.net/pub/stats/arin/delegated-arin-latest','http://ftp.arin.net/pub/stats/arin/delegated-arin-latest.md5','ftp://ftp.arin.net/pub/stats/arin/delegated-arin-latest.asc');
+insert into icann values (nextval('icann_id_seq'),'lacnic','http://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest','http://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.md5','ftp://ftp.lacnic.net/pub/stats/lacnic/delegated-lacnic-latest.asc');
 
-create table statsfile (id serial, registry varchar(16), file bytea, downloadtime timestamp, trytime timestamp, etag varchar(50), lastmodified timestamp, md5 varchar(256));
+create table statsfile (id serial, registry varchar(16), file bytea, downloadtime timestamp, trytime timestamp, etag varchar(50), lastmodified timestamp, lastcode int, md5 varchar(256));
 insert into statsfile values (nextval('statsfile_id_seq'),'apnic');
 insert into statsfile values (nextval('statsfile_id_seq'),'ripe');
 insert into statsfile values (nextval('statsfile_id_seq'),'afrinic');

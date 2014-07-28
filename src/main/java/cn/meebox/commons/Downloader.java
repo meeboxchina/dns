@@ -53,6 +53,7 @@ public class Downloader {
         	while(headerIterator.hasNext()){
             	header = headerIterator.nextHeader();
             	
+            	
             }
         	
 	        HttpEntity entity = response.getEntity();

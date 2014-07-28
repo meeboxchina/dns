@@ -34,20 +34,22 @@ public class ICANN {
 	}
 	
 	public void getStatsfile(){
-		
+		String registry;
+		String dl;
+		String chkmd5;
+		String etag;
 		try {
 			Class.forName("org.postgresql.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
 			Statement stmt = conn.createStatement();
-			String sql = "select icann.registry,icann.dl,icann.chkmd5,statsfile.etag from icann left join statsfile on icann.registry = statsfile.registry";
-			ResultSet rs = stmt.executeQuery(sql);
-			int i=0;
+			String sqlQuery = "select icann.registry,icann.dl,icann.chkmd5,statsfile.etag from icann left join statsfile on icann.registry = statsfile.registry";
+			ResultSet rs = stmt.executeQuery(sqlQuery);
 			while(rs.next()){
-				rir[i].put("registry", rs.getString("registry"));
-				rir[i].put("dl", rs.getString("dl"));
-				rir[i].put("chkmd5", rs.getString("chkmd5"));
-				rir[i].put("etag", rs.getString("etag"));
-				i++;
+				registry = rs.getString("registry");
+				dl = rs.getString("dl");
+				chkmd5 = rs.getString("chkmd5");
+				etag = rs.getString("chkmd5");
+				
 			}
 			
 			stmt.close();

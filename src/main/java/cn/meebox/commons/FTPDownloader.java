@@ -26,7 +26,7 @@ public class FTPDownloader {
 	private int code;
 	
 	//private static String regex = "^(http|https|ftp){1}://([a-zA-Z0-9-.]{3,})(/.*)$";
-	private static String regex = "^(ftp)://([a-zA-Z0-9-.]{3,})(/.*)$";
+	private static String regex = "^(ftp|http)://([a-zA-Z0-9-.]{3,})(/.*)$";
 	
 	public FTPDownloader(String host, String filepath) {
 		// TODO Auto-generated constructor stub
@@ -92,4 +92,11 @@ public class FTPDownloader {
 		
 	}
 	
+	public int getCode(){
+		return this.code;
+	}
+	
+	public String getFilename(){
+		return this.filename;
+	}
 }

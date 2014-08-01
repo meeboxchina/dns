@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 import org.apache.http.client.ClientProtocolException;
 
 import cn.meebox.commons.Downloader;
+import cn.meebox.commons.FTPDownloader;
 import cn.meebox.commons.HttpDownload;
 
 public class ICANN {
@@ -37,94 +39,78 @@ public class ICANN {
 		this.RIR = RIR;
 	}
 	
-	public boolean getChkmd5(){
-			try {
-				Class.forName("org.postgresql.Driver");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Connection conn;
-			try {
-				conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
-				Statement stmt = conn.createStatement();
-				String sqlQuery = "select icann.registry,icann.chkmd5 from icann left join statsfile on icann.registry = statsfile.registry where registry='" + RIR  +"'";
-				ResultSet rs = stmt.executeQuery(sqlQuery);
-				if(rs.next()){
-					this.chkmd5 = rs.getString("chkmd5");
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-	}
-	public void getStatsfile() throws ClientProtocolException, IOException{
+	public void getStatsfile() throws Exception{
 		String registry;
 		String dl;
 		String chkmd5;
+		String md5;
 		String etag;
 		int code;
 		int length;
 		String now;
 		
-		try {
-			Class.forName("org.postgresql.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
-			Statement stmt = conn.createStatement();
-			String sqlQuery = "select icann.registry,icann.dl,icann.chkmd5,statsfile.etag from icann left join statsfile on icann.registry = statsfile.registry";
-			ResultSet rs = stmt.executeQuery(sqlQuery);
-			while(rs.next()){
-				registry = rs.getString("registry");
-				dl = rs.getString("dl");
-				chkmd5 = rs.getString("chkmd5");
-				etag = rs.getString("etag");
+		Class.forName("org.postgresql.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
+		Statement stmt = conn.createStatement();
+		String sqlQuery = "select icann.registry,icann.dl,icann.chkmd5,statsfile.md5 from icann left join statsfile on icann.registry = statsfile.registry";
+		ResultSet rs = stmt.executeQuery(sqlQuery);
+		while(rs.next()){
+			registry = rs.getString("registry");
+			dl = rs.getString("dl");
+			chkmd5 = rs.getString("chkmd5");
+			md5 = rs.getString("md5");
 				
-				Downloader downloader = new Downloader(dl, "/Users/sunsunny/");
-				downloader.down(etag);
-				
-				etag = downloader.getEtag();
-				code = downloader.getCode();
-				if(code ==200){
-					length = downloader.getLength();
+			FTPDownloader ftpmd5 = new FTPDownloader(chkmd5);
+			ftpmd5.down();
+			File filemd5 = new File("./" + ftpmd5.getFilename());
+			FileReader frmd5 = new FileReader(filemd5);
+			
+			BufferedReader br = new BufferedReader(frmd5);
+			String latestmd5 = br.readLine();
+			frmd5.close();
+			
+			Pattern p = Pattern.compile(".*([a-z0-9]{32}).*");
+			Matcher m = p.matcher(latestmd5);
+			if(m.matches()){
+				latestmd5 = m.group(1);
+			}
+			if(md5.matches(latestmd5)){
+				Date date = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+				now = sdf.format(date);
+					
+				String sqlUpdate = "update statsfile set "
+						+ "trytime='" + now + "' "
+						+ "where registry='" + registry + "'";
+					
+				Statement stmtUpdate = conn.createStatement();
+				stmtUpdate.executeUpdate(sqlUpdate);
+					
+			}else{
+				FTPDownloader ftp = new FTPDownloader(dl);
+				ftp.down();
+				code = ftp.getCode();
+					
+				//if(code ==226){
 					Date date = new Date();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 					now = sdf.format(date);
-					
-					String sqlUpdate = "update statsfile set etag='" + etag + "',"
-							+ "lastcode=" + code + ","
-							+ "length=" + length + ","
+						
+					String sqlUpdate = "update statsfile set "
 							+ "downloadtime='" + now + "',"
-							+ "trytime='" + now + "'"
+							+ "trytime='" + now + "',"
+							+ "md5='" + latestmd5 + "' "
 							+ "where registry='" + registry + "'";
-					
+						
 					Statement stmtUpdate = conn.createStatement();
 					stmtUpdate.executeUpdate(sqlUpdate);
-				}else{
-					Date date = new Date();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
-					now = sdf.format(date);
-					
-					String sqlUpdate = "update statsfile set lastcode=" + code + ","
-							+ "trytime='" + now + "'"
-							+ "where registry='" + registry + "'";
-					
-					Statement stmtUpdate = conn.createStatement();
-					stmtUpdate.executeUpdate(sqlUpdate);
-				}
-				
+				//}
 			}
 			
-			stmt.close();
-			conn.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		}
 		
+		stmt.close();
+		conn.close();
 	}
 	
 	public void import2db() throws IOException{

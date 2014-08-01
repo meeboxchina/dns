@@ -18,7 +18,7 @@ public class Test {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static void main(String[] args) throws ClientProtocolException, IOException {
+	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		ICANN icann = new ICANN();
 		icann.getStatsfile();

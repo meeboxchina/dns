@@ -24,7 +24,8 @@ import cn.meebox.commons.HttpDownload;
 
 public class ICANN {
 	
-	private String RIR;
+	private String RIR;			//registry
+	private String chkmd5;
 	private String dest;
 	private String filepath;
 	private Hashtable[] rir;
@@ -32,10 +33,32 @@ public class ICANN {
 	public ICANN() {
 	}
 	
-	public ICANN(String RIP) {
-		this.RIR = RIP;
+	public ICANN(String RIR) {
+		this.RIR = RIR;
 	}
 	
+	public boolean getChkmd5(){
+			try {
+				Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Connection conn;
+			try {
+				conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
+				Statement stmt = conn.createStatement();
+				String sqlQuery = "select icann.registry,icann.chkmd5 from icann left join statsfile on icann.registry = statsfile.registry where registry='" + RIR  +"'";
+				ResultSet rs = stmt.executeQuery(sqlQuery);
+				if(rs.next()){
+					this.chkmd5 = rs.getString("chkmd5");
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+	}
 	public void getStatsfile() throws ClientProtocolException, IOException{
 		String registry;
 		String dl;

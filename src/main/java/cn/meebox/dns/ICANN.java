@@ -41,8 +41,8 @@ public class ICANN {
 	
 	public void getStatsfile() throws Exception{
 		String registry;
-		String dl;
-		String chkmd5;
+		String dlurl;
+		String md5url;
 		String md5;
 		String etag;
 		int code;
@@ -52,15 +52,15 @@ public class ICANN {
 		Class.forName("org.postgresql.Driver");
 		Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/meebox", "meebox", "meebox");
 		Statement stmt = conn.createStatement();
-		String sqlQuery = "select icann.registry,icann.dl,icann.chkmd5,statsfile.md5 from icann left join statsfile on icann.registry = statsfile.registry";
+		String sqlQuery = "select icann.registry,icann.dlurl,icann.md5url,statsfile.md5 from icann left join statsfile on icann.registry = statsfile.registry";
 		ResultSet rs = stmt.executeQuery(sqlQuery);
 		while(rs.next()){
 			registry = rs.getString("registry");
-			dl = rs.getString("dl");
-			chkmd5 = rs.getString("chkmd5");
+			dlurl = rs.getString("dlurl");
+			md5url = rs.getString("md5url");
 			md5 = rs.getString("md5");
 				
-			FTPDownloader ftpmd5 = new FTPDownloader(chkmd5);
+			FTPDownloader ftpmd5 = new FTPDownloader(md5url);
 			ftpmd5.down();
 			File filemd5 = new File("./" + ftpmd5.getFilename());
 			FileReader frmd5 = new FileReader(filemd5);
@@ -74,7 +74,7 @@ public class ICANN {
 			if(m.matches()){
 				latestmd5 = m.group(1);
 			}
-			if(md5.matches(latestmd5)){
+			if(md5 != null && md5.matches(latestmd5)){
 				Date date = new Date();
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 				now = sdf.format(date);
@@ -87,7 +87,7 @@ public class ICANN {
 				stmtUpdate.executeUpdate(sqlUpdate);
 					
 			}else{
-				FTPDownloader ftp = new FTPDownloader(dl);
+				FTPDownloader ftp = new FTPDownloader(dlurl);
 				ftp.down();
 				code = ftp.getCode();
 					

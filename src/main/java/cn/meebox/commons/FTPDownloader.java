@@ -56,7 +56,7 @@ public class FTPDownloader {
 		}
 	}
 
-	public void down(){
+	public String down(String localpath){
 		System.out.println(host);
 		FTPClient ftp = new FTPClient();
 		try {
@@ -64,10 +64,10 @@ public class FTPDownloader {
 			ftp.enterLocalPassiveMode();
 			ftp.login("anonymous", "");
 			
-			File file = new File("./" + filename);
+			File file = new File(localpath + filename);
 			FileOutputStream fos = new FileOutputStream(file);
 			
-			System.out.println(filepath);
+			//System.out.println(filepath);
 			if(ftp.retrieveFile(filepath, fos)){
 				this.code = ftp.getReplyCode();
 				//System.out.println(ftp.getReplyCode());
@@ -82,6 +82,7 @@ public class FTPDownloader {
 			
 			fos.close();
 			
+			
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,7 +90,7 @@ public class FTPDownloader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return this.filename;
 	}
 	
 	public int getCode(){

@@ -39,7 +39,7 @@ public class ICANN {
 		this.RIR = RIR;
 	}
 	
-	public void getStatsfile() throws Exception{
+	public void getStatsfile(String localpath) throws Exception{
 		String registry;
 		String dlurl;
 		String md5url;
@@ -61,8 +61,8 @@ public class ICANN {
 			md5 = rs.getString("md5");
 				
 			FTPDownloader ftpmd5 = new FTPDownloader(md5url);
-			ftpmd5.down();
-			File filemd5 = new File("./" + ftpmd5.getFilename());
+			ftpmd5.down(localpath);
+			File filemd5 = new File(localpath + ftpmd5.getFilename());
 			FileReader frmd5 = new FileReader(filemd5);
 			
 			BufferedReader br = new BufferedReader(frmd5);
@@ -88,7 +88,7 @@ public class ICANN {
 					
 			}else{
 				FTPDownloader ftp = new FTPDownloader(dlurl);
-				ftp.down();
+				String filename = ftp.down(localpath);
 				code = ftp.getCode();
 					
 				//if(code ==226){
@@ -100,6 +100,8 @@ public class ICANN {
 							+ "downloadtime='" + now + "',"
 							+ "trytime='" + now + "',"
 							+ "md5='" + latestmd5 + "' "
+							+ "file=lo_import('" + localpath + filename + "'), "
+							+ "filepath='" + localpath + filename + "', "
 							+ "where registry='" + registry + "'";
 						
 					Statement stmtUpdate = conn.createStatement();

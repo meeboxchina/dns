@@ -21,7 +21,7 @@ public class Test {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 		ICANN icann = new ICANN();
-		icann.getStatsfile();
+		icann.getStatsfile("/home/sunyu/");
 		
 		//icann.getAPNIC("/Users/sunsunny/");
 		//icann.import2db();

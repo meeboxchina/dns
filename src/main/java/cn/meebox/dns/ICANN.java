@@ -101,7 +101,7 @@ public class ICANN {
 							+ "trytime='" + now + "',"
 							+ "md5='" + latestmd5 + "' "
 							+ "file=lo_import('" + localpath + filename + "'), "
-							+ "filepath='" + localpath + filename + "', "
+							+ "filepath='" + localpath + filename + "' "
 							+ "where registry='" + registry + "'";
 						
 					Statement stmtUpdate = conn.createStatement();
